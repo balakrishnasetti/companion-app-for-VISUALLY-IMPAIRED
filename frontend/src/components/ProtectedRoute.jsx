@@ -1,0 +1,10 @@
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
+
+export default function ProtectedRoute({ roles }) {
+  const { user, loading } = useAuth();
+  if (loading) return <main className="loading-screen" aria-live="polite">Checking your secure session…</main>;
+  if (!user) return <Navigate to="/login" replace />;
+  if (roles && !roles.includes(user.role)) return <Navigate to="/app" replace />;
+  return <Outlet />;
+}
